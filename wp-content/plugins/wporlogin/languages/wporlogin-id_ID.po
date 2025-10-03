@@ -1,0 +1,558 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WPOrLogin - Customize WordPress Login and Registration "
+"Page\n"
+"POT-Creation-Date: 2025-02-19 09:29-0500\n"
+"PO-Revision-Date: 2025-02-19 09:42-0500\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: id_ID\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.5\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
+"X-Poedit-WPHeader: wporlogin.php\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.min.js\n"
+
+#: includes/redirects-wporlogin.php:53
+msgid "Session Redirection Settings"
+msgstr "Pengaturan Pengalihan Sesi"
+
+#: includes/redirects-wporlogin.php:55
+msgid ""
+"Set up automatic redirects for users when they log in or log out of "
+"WordPress."
+msgstr ""
+"Siapkan pengalihan otomatis untuk pengguna saat mereka masuk atau keluar "
+"dari WordPress."
+
+#: includes/redirects-wporlogin.php:76 includes/wporloginpage.php:65
+msgid "Need help? "
+msgstr "Butuh bantuan?"
+
+#: includes/redirects-wporlogin.php:76
+#: includes/templates/recaptcha-settings-template.php:30
+#: includes/wporloginpage.php:65
+msgid "Watch the video"
+msgstr "Tonton videonya"
+
+#: includes/redirects-wporlogin.php:80
+msgid "Redirect After Login"
+msgstr "Redirect Setelah Login"
+
+#: includes/redirects-wporlogin.php:84
+msgid "Enable redirection after login"
+msgstr "Aktifkan pengalihan setelah login"
+
+#: includes/redirects-wporlogin.php:89 includes/redirects-wporlogin.php:124
+msgid "Yes, enable redirection"
+msgstr "Ya, aktifkan pengalihan"
+
+#: includes/redirects-wporlogin.php:95
+msgid "Page to redirect users after login (URL)"
+msgstr "Halaman untuk mengarahkan pengguna setelah login (URL)"
+
+#: includes/redirects-wporlogin.php:101
+msgid "Apply redirection to administrators as well"
+msgstr "Terapkan pengalihan ke administrator juga"
+
+#: includes/redirects-wporlogin.php:106
+msgid "Yes, redirect administrators too"
+msgstr "Ya, alihkan administrator juga"
+
+#: includes/redirects-wporlogin.php:115
+msgid "Redirect on Logout"
+msgstr "Pengalihan saat Keluar"
+
+#: includes/redirects-wporlogin.php:119
+msgid "Enable redirection after logout"
+msgstr "Aktifkan pengalihan setelah keluar"
+
+#: includes/redirects-wporlogin.php:130
+msgid "Page to redirect users after logout (URL)"
+msgstr "Halaman untuk mengarahkan pengguna setelah keluar (URL)"
+
+#: includes/templates/recaptcha-settings-template-form.php:33
+msgid "Google reCAPTCHA version"
+msgstr "Versi Google reCAPTCHA"
+
+#: includes/templates/recaptcha-settings-template-form.php:37
+msgid "Google reCAPTCHA disabled"
+msgstr "Google reCAPTCHA dinonaktifkan"
+
+#: includes/templates/recaptcha-settings-template-form.php:38
+msgid "Google reCAPTCHA v2"
+msgstr "Google reCAPTCHA v2"
+
+#: includes/templates/recaptcha-settings-template-form.php:39
+msgid "Google reCAPTCHA v3"
+msgstr "Google reCAPTCHA v3"
+
+#: includes/templates/recaptcha-settings-template-form.php:41
+msgid "Select the Google reCAPTCHA version you want to use."
+msgstr "Pilih versi Google reCAPTCHA yang ingin Anda gunakan."
+
+#: includes/templates/recaptcha-settings-template-form.php:44
+msgid ""
+"To use reCAPTCHA, first register your domain with Google's service, then "
+"enter the keys in the fields below."
+msgstr ""
+"Untuk menggunakan reCAPTCHA, pertama-tama daftarkan domain Anda dengan "
+"layanan Google, lalu masukkan kunci di kolom di bawah ini."
+
+#: includes/templates/recaptcha-settings-template-form.php:45
+msgid ""
+"<a href=\"https://www.google.com/recaptcha/admin\" target=\"_blank\">Click "
+"here to register your domain</a>"
+msgstr ""
+"<a href=\"https://www.google.com/recaptcha/admin\" target=\"_blank\">Klik di "
+"sini untuk mendaftarkan domain Anda</a>"
+
+#: includes/templates/recaptcha-settings-template-form.php:52
+msgid "Site key (v2)"
+msgstr "Kunci situs (v2)"
+
+#: includes/templates/recaptcha-settings-template-form.php:60
+msgid "Secret key (v2)"
+msgstr "Kunci rahasia (v2)"
+
+#: includes/templates/recaptcha-settings-template-form.php:70
+msgid "Site key (v3)"
+msgstr "Kunci situs (v3)"
+
+#: includes/templates/recaptcha-settings-template-form.php:78
+msgid "Secret key (v3)"
+msgstr "Kunci rahasia (v3)"
+
+#: includes/templates/recaptcha-settings-template-form.php:88
+msgid "Enable reCAPTCHA for:"
+msgstr "Aktifkan reCAPTCHA untuk:"
+
+#: includes/templates/recaptcha-settings-template-form.php:93
+msgid "Login form"
+msgstr "Form login"
+
+#: includes/templates/recaptcha-settings-template-form.php:96
+msgid "Registration form"
+msgstr "Form Pendaftaran"
+
+#: includes/templates/recaptcha-settings-template-form.php:100
+msgid "Password recovery form"
+msgstr "Formulir pemulihan kata sandi"
+
+#: includes/templates/recaptcha-settings-template.php:9
+#: includes/wporloginpage.php:20
+msgid "Google reCAPTCHA"
+msgstr "Google reCAPTCHA"
+
+#: includes/templates/recaptcha-settings-template.php:13
+msgid ""
+"Protect your website from bots and unauthorized access with "
+"<strong>reCAPTCHA v2</strong> or <strong>v3</strong>."
+msgstr ""
+"Lindungi situs web Anda dari bot dan akses tidak sah dengan "
+"<strong>reCAPTCHA v2</strong> atau <strong>v3</strong>."
+
+#: includes/templates/recaptcha-settings-template.php:30
+msgid "Do you need help? "
+msgstr "Apakah Anda butuh bantuan?"
+
+#: includes/templates/wporlogin-paypal-done.php:9
+msgid "Donate now"
+msgstr "Donasi sekarang"
+
+#: includes/templates/wporlogin-paypal-done.php:15
+msgid "Important"
+msgstr "Penting"
+
+#: includes/templates/wporlogin-paypal-done.php:15
+msgid ""
+"If you appreciate my work, consider making a small donation to support it. "
+"Your help is greatly appreciated!"
+msgstr ""
+"Jika Anda menghargai karya saya, pertimbangkan untuk memberikan sumbangan "
+"kecil untuk mendukungnya. Bantuan Anda sangat dihargai!"
+
+#: includes/templates/wporlogin-paypal-done.php:17
+msgid ""
+"To donate, simply click the <strong>Donate</strong> button. Thank you! 😊"
+msgstr ""
+"Untuk berdonasi, cukup klik tombol <strong>Donasi</strong> . Terima kasih! 😊"
+
+#: includes/wporloginpage.php:12
+msgid "Plugin WPOrLogin"
+msgstr "Plugin WPOrLogin"
+
+#: includes/wporloginpage.php:13
+msgid "WPOrLogin"
+msgstr "WPOrLogin"
+
+#: includes/wporloginpage.php:21
+msgid "Remove Language"
+msgstr "Hapus Bahasa"
+
+#: includes/wporloginpage.php:22
+msgid "Redirect"
+msgstr "Pengalihan"
+
+#: includes/wporloginpage.php:42
+msgid "Remove language selector"
+msgstr "Hapus pemilih bahasa"
+
+#: includes/wporloginpage.php:44
+msgid "Hide or remove the language selector from the login page."
+msgstr "Sembunyikan atau hapus pemilih bahasa dari halaman login."
+
+#: includes/wporloginpage.php:75
+msgid "Delete"
+msgstr "Hapus"
+
+#: includes/wporloginpage.php:79
+msgid "Remove the dropdown language selector from the login page."
+msgstr "Hapus pemilih bahasa dropdown dari halaman login."
+
+#: includes/wporloginpage.php:155
+msgid "Appearance"
+msgstr "Penampilan"
+
+#: includes/wporloginpage.php:157
+msgid ""
+"<strong>WPOrLogin</strong> allows you to customize the appearance of the "
+"WordPress login page."
+msgstr ""
+"<strong>WPOrLogin</strong> memungkinkan Anda menyesuaikan tampilan halaman "
+"login WordPress."
+
+#: includes/wporloginpage.php:174
+msgid "Select an option"
+msgstr "Pilih satu opsi"
+
+#: includes/wporloginpage.php:189
+msgid "Basic"
+msgstr "Dasar"
+
+#: includes/wporloginpage.php:199
+msgid "Standard"
+msgstr "Standar"
+
+#: includes/wporloginpage.php:210
+msgid "Premium"
+msgstr ""
+
+#: includes/wporloginpage.php:279 includes/wporloginpage.php:287
+msgid "Logo"
+msgstr "Logo"
+
+#: includes/wporloginpage.php:298
+msgid "Upload logo"
+msgstr "Unggah logo"
+
+#: includes/wporloginpage.php:299
+msgid ""
+"You can upload your logo here. A maximum width of <strong>300 pixels</"
+"strong> is recommended."
+msgstr ""
+"Anda dapat mengunggah logo Anda di sini. Lebar maksimum yang disarankan "
+"adalah <strong>300 piksel</strong> ."
+
+#: includes/wporloginpage.php:306
+msgid "Logo width"
+msgstr "Lebar logo"
+
+#: includes/wporloginpage.php:310
+msgid "Specify the logo width in pixels."
+msgstr "Tentukan lebar logo dalam piksel."
+
+#: includes/wporloginpage.php:317
+msgid "Logo height"
+msgstr "Tinggi logo"
+
+#: includes/wporloginpage.php:321
+msgid "Specify the logo height in pixels."
+msgstr "Tentukan tinggi logo dalam piksel."
+
+#: includes/wporloginpage.php:328
+msgid "Logo position"
+msgstr "Posisi logo"
+
+#: includes/wporloginpage.php:332
+msgid "Top left"
+msgstr "Kiri atas"
+
+#: includes/wporloginpage.php:333
+msgid "Center left"
+msgstr "Tengah kiri"
+
+#: includes/wporloginpage.php:334
+msgid "Bottom left"
+msgstr "Kiri bawah"
+
+#: includes/wporloginpage.php:335
+msgid "Top right"
+msgstr "Kanan atas"
+
+#: includes/wporloginpage.php:336
+msgid "Center right"
+msgstr "Tengah kanan"
+
+#: includes/wporloginpage.php:337
+msgid "Bottom right"
+msgstr "Kanan bawah"
+
+#: includes/wporloginpage.php:338
+msgid "Top center"
+msgstr "Tengah atas"
+
+#: includes/wporloginpage.php:339
+msgid "Center"
+msgstr "Tengah"
+
+#: includes/wporloginpage.php:340
+msgid "Bottom center"
+msgstr "Tengah bawah"
+
+#: includes/wporloginpage.php:342
+msgid "Set the initial position of the logo on the login page."
+msgstr "Mengatur posisi awal logo pada halaman login."
+
+#: includes/wporloginpage.php:349
+msgid "Background size"
+msgstr "Ukuran latar belakang"
+
+#: includes/wporloginpage.php:353
+msgid "None → No background size adjustment."
+msgstr "Tidak ada → Tidak ada penyesuaian ukuran latar belakang."
+
+#: includes/wporloginpage.php:354
+msgid ""
+"Cover → The image will cover the entire background without losing proportion."
+msgstr ""
+"Sampul → Gambar akan menutupi seluruh latar belakang tanpa kehilangan "
+"proporsi."
+
+#: includes/wporloginpage.php:355
+msgid ""
+"Contain → The image will fit within the background without being cropped."
+msgstr "Berisi → Gambar akan pas dengan latar belakang tanpa terpotong."
+
+#: includes/wporloginpage.php:357
+msgid "Adjust how the background image is displayed."
+msgstr "Sesuaikan bagaimana gambar latar belakang ditampilkan."
+
+#: includes/wporloginpage.php:364
+msgid "Logo URL"
+msgstr "URL Logo"
+
+#: includes/wporloginpage.php:368
+msgid "Specify the URL where the logo will redirect when clicked."
+msgstr "Tentukan URL tempat logo akan dialihkan saat diklik."
+
+#: includes/wporloginpage.php:375
+msgid "Logo title"
+msgstr "Judul logo"
+
+#: includes/wporloginpage.php:379
+msgid ""
+"Set the alternative title for the logo (useful for accessibility and SEO)."
+msgstr ""
+"Tetapkan judul alternatif untuk logo (berguna untuk aksesibilitas dan SEO)."
+
+#: includes/wporloginpage.php:386 includes/wporloginpage.php:394
+msgid "Background image"
+msgstr "Gambar latar belakang"
+
+#: includes/wporloginpage.php:399
+msgid "Free images"
+msgstr "Gambar gratis"
+
+#: includes/wporloginpage.php:402
+msgid "My images"
+msgstr "Gambar saya"
+
+#: includes/wporloginpage.php:412
+msgid "Upload or Select Background Image"
+msgstr "Unggah atau Pilih Gambar Latar Belakang"
+
+#: includes/wporloginpage.php:413
+msgid ""
+"Select a background image from here. For the best results, use images with a "
+"resolution of <strong>1920x1080 pixels</strong>."
+msgstr ""
+"Pilih gambar latar belakang dari sini. Untuk hasil terbaik, gunakan gambar "
+"dengan resolusi <strong>1920x1080 piksel</strong> ."
+
+#: includes/wporloginpage.php:418
+msgid "You can select a background image from here"
+msgstr "Anda dapat memilih gambar latar belakang dari sini"
+
+#: includes/wporloginpage.php:425
+msgid "Image "
+msgstr "Gambar "
+
+#: includes/wporloginpage.php:432
+msgid ""
+"Images from Unsplash and Pixabay are free to use. You can download more "
+"images from <a href=\"https://unsplash.com/\" "
+"target=\"_blank\"><strong>Unsplash</strong></a> and <a href=\"https://"
+"pixabay.com/\" target=\"_blank\"><strong>Pixabay</strong></a>."
+msgstr ""
+"Gambar dari Unsplash dan Pixabay dapat digunakan secara gratis. Anda dapat "
+"mengunduh lebih banyak gambar dari <a href=\"https://unsplash.com/\" "
+"target=\"_blank\"><strong>Unsplash</strong></a> dan <a href=\"https://"
+"pixabay.com/\" target=\"_blank\"><strong>Pixabay</strong></a>."
+
+#: js/img-fondo.js:27
+msgctxt "wporlogin"
+msgid "Logo"
+msgstr "Logo"
+
+#: js/img-fondo.js:29
+msgctxt "wporlogin"
+msgid "Select logo"
+msgstr "Pilih Logo"
+
+#: js/img-fondo.js:64
+msgctxt "wporlogin"
+msgid "Background image"
+msgstr "Gambar latar belakang"
+
+#: js/img-fondo.js:66
+msgctxt "wporlogin"
+msgid "Select background image"
+msgstr "Pilih gambar latar belakang"
+
+#: wporlogin.php:371
+msgid ""
+"Google reCAPTCHA v2 is selected, but the site or secret keys are not "
+"configured."
+msgstr ""
+"Google reCAPTCHA v2 dipilih, tetapi situs atau kunci rahasia tidak "
+"dikonfigurasi."
+
+#: wporlogin.php:384
+msgid ""
+"Google reCAPTCHA v3 is selected, but the site or secret keys are not "
+"configured."
+msgstr ""
+"Google reCAPTCHA v3 dipilih, tetapi situs atau kunci rahasia tidak "
+"dikonfigurasi."
+
+#: wporlogin.php:408
+#, php-format
+msgid ""
+"Developed by <a href=\"%s\" target=\"_blank\" class=\"text-info\">Oregoom."
+"com</a>"
+msgstr ""
+"Dikembangkan oleh <a href=\"%s\" target=\"_blank\" class=\"text-"
+"info\">Oregoom.com</a>"
+
+#: wporlogin.php:465
+msgid "Sign Up"
+msgstr "Daftar"
+
+#: wporlogin.php:467
+msgid "Reset Password"
+msgstr "Setel Ulang Kata Sandi"
+
+#: wporlogin.php:472
+msgid "Log In"
+msgstr "Masuk"
+
+#: wporlogin.php:592 wporlogin.php:761 wporlogin.php:875
+msgid "Please complete the reCAPTCHA verification."
+msgstr "Harap selesaikan verifikasi reCAPTCHA."
+
+#: wporlogin.php:629 wporlogin.php:799 wporlogin.php:903
+msgid "Error verifying reCAPTCHA. Please try again."
+msgstr "Terjadi kesalahan saat memverifikasi reCAPTCHA. Silakan coba lagi."
+
+#: wporlogin.php:638 wporlogin.php:645 wporlogin.php:809 wporlogin.php:817
+#: wporlogin.php:913
+msgid "The reCAPTCHA verification has failed. Please try again."
+msgstr "Verifikasi reCAPTCHA gagal. Silakan coba lagi."
+
+#: wporlogin.php:888
+msgid "reCAPTCHA configuration error."
+msgstr "Kesalahan konfigurasi reCAPTCHA."
+
+#: wporlogin.php:919
+msgid "The reCAPTCHA v3 score is very low. Please try again."
+msgstr "Skor reCAPTCHA v3 sangat rendah. Silakan coba lagi."
+
+#: wporlogin.php:954
+msgid ""
+"Hello! You have been using the WPOrLogin plugin on your site for 2 weeks - "
+"we hope it has been helpful. If you're enjoying the plugin, would you mind "
+"rating it with 5 stars to help spread the word?"
+msgstr ""
+"Halo! Anda telah menggunakan plugin WPOrLogin di situs Anda selama 2 minggu "
+"- kami harap ini bermanfaat. Jika Anda menyukai plugin ini, apakah Anda "
+"berkenan memberi peringkat 5 bintang untuk membantu menyebarkan informasi?"
+
+#: wporlogin.php:960
+msgid "Okay, you deserve it."
+msgstr "Oke, kamu pantas mendapatkannya."
+
+#: wporlogin.php:988
+msgid "Excelente"
+msgstr "Luar biasa"
+
+#: wporlogin.php:993
+msgid "Error de nonce"
+msgstr "Kesalahan masa lalu"
+
+#: wporlogin.php:1012
+msgid "IMPORTANT: "
+msgstr "PENTING: "
+
+#: wporlogin.php:1012
+msgid ""
+"If you can't see the changes you've made to your website, you may need to "
+"force the page to reload from the server with <strong>Ctrl + F5</strong> or "
+"clear the WordPress cache."
+msgstr ""
+"Jika Anda tidak dapat melihat perubahan yang telah Anda buat pada situs web "
+"Anda, Anda mungkin perlu memaksa halaman untuk dimuat ulang dari server "
+"dengan <strong>Ctrl + F5</strong> atau menghapus cache WordPress."
+
+#: wporlogin.php:1013
+msgid "Clear WordPress cache"
+msgstr "Hapus cache WordPress"
+
+#: wporlogin.php:1013
+msgid "More information here"
+msgstr "Informasi lebih lanjut di sini"
+
+#. Plugin Name of the plugin/theme
+msgid "WPOrLogin - Customize WordPress Login and Registration Page"
+msgstr "WPOrLogin - Kustomisasi Halaman Login dan Registrasi WordPress"
+
+#. Plugin URI of the plugin/theme
+#. Author URI of the plugin/theme
+msgid "https://oregoom.com/wporlogin/"
+msgstr "https://oregoom.com/wporlogin/"
+
+#. Description of the plugin/theme
+msgid ""
+"WPOrLogin allows you to customize the WordPress login and registration page. "
+"You can change the logo, background, and layout. Choose from pre-designed "
+"templates and improve security with Google reCAPTCHA. Additionally, you can "
+"redirect users after login and hide the language switcher for a cleaner "
+"interface."
+msgstr ""
+"WPOrLogin memungkinkan Anda untuk menyesuaikan halaman login dan registrasi "
+"WordPress. Anda dapat mengubah logo, latar belakang, dan tata letak. Pilih "
+"dari templat yang telah dirancang sebelumnya dan tingkatkan keamanan dengan "
+"Google reCAPTCHA. Selain itu, Anda dapat mengarahkan pengguna setelah login "
+"dan menyembunyikan pengalih bahasa untuk antarmuka yang lebih bersih."
+
+#. Author of the plugin/theme
+msgid "Oregoom"
+msgstr "Oregoom"

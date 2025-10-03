@@ -1,0 +1,28 @@
+# OS/IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Node
+node_modules/
+*.log
+
+# Build assets
+wp-content/themes/sitec/assets/css/main.css.map
+
+# WordPress
+wp-content/uploads/
+wp-content/upgrade/
+wp-content/cache/
+wp-content/advanced-cache.php
+wp-content/wp-cache-config.php
+wp-content/backups/
+wp-content/backup-*/
+wp-content/plugins/**/vendor/
+
+# Secrets
+.env
+.env.*
+sitec-secrets.json
+

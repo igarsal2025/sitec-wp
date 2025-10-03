@@ -1,0 +1,46 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - staging
+      - dev
+
+jobs:
+  rsync-deploy:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/dev'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Build Tailwind (theme)
+        working-directory: wp-content/themes/sitec
+        run: |
+          npm ci || npm install
+          npm run build
+
+      - name: Define target env
+        id: envmap
+        run: |
+          if [ "${GITHUB_REF##*/}" = "main" ]; then echo "env=prod" >> $GITHUB_OUTPUT; fi
+          if [ "${GITHUB_REF##*/}" = "staging" ]; then echo "env=staging" >> $GITHUB_OUTPUT; fi
+          if [ "${GITHUB_REF##*/}" = "dev" ]; then echo "env=dev" >> $GITHUB_OUTPUT; fi
+
+      - name: Deploy via rsync
+        uses: burnett01/rsync-deployments@6.0.0
+        with:
+          switches: -az --delete --exclude-from=.rsyncignore
+          path: ./
+          remote_path: ${{ secrets.SITEC_${{ steps.envmap.outputs.env }}_REMOTE_PATH }}
+          remote_host: ${{ secrets.SITEC_${{ steps.envmap.outputs.env }}_REMOTE_HOST }}
+          remote_user: ${{ secrets.SITEC_${{ steps.envmap.outputs.env }}_REMOTE_USER }}
+          remote_key: ${{ secrets.SITEC_${{ steps.envmap.outputs.env }}_SSH_KEY }}
+
+

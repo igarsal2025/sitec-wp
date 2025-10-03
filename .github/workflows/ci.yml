@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, staging, dev ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install deps (theme)
+        working-directory: wp-content/themes/sitec
+        run: npm ci || npm install
+
+      - name: Build Tailwind
+        working-directory: wp-content/themes/sitec
+        run: npm run build
+
+      - name: PHP Syntax Check
+        run: |
+          find . -type f -name "*.php" -not -path "./wp-content/plugins/*/vendor/*" -print0 | xargs -0 -n1 php -l
+

@@ -1,0 +1,11 @@
+.git/
+.github/
+node_modules/
+wp-content/uploads/
+wp-content/cache/
+wp-content/upgrade/
+wp-content/themes/sitec/node_modules/
+wp-content/themes/sitec/assets/css/main.css.map
+.env*
+sitec-secrets.json
+
