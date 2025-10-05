@@ -54,3 +54,43 @@ add_action('after_switch_theme', function(){
 });
 
 
+// Restaurar portada si se modificó: asigna "Inicio" con plantilla front-page.php (se ejecuta una sola vez)
+add_action('init', function(){
+	if ( get_option('sitec_front_restored') ) return;
+
+	$front_id = (int) get_option('page_on_front');
+	$show_on_front = get_option('show_on_front');
+	$needs_restore = ($show_on_front !== 'page') || !$front_id;
+
+	if (!$needs_restore && $front_id) {
+		$template = get_page_template_slug($front_id);
+		if ($template !== 'front-page.php') {
+			$needs_restore = true;
+		}
+	}
+
+	if (!$needs_restore) return;
+
+	$front = get_page_by_title('Inicio', OBJECT, 'page');
+	if ($front && !is_wp_error($front)) {
+		update_post_meta($front->ID, '_wp_page_template', 'front-page.php');
+		update_option('page_on_front', (int) $front->ID);
+		update_option('show_on_front', 'page');
+		update_option('sitec_front_restored', time());
+		return;
+	}
+
+	$new_id = wp_insert_post([
+		'post_title'  => 'Inicio',
+		'post_type'   => 'page',
+		'post_status' => 'publish',
+		'post_content'=> ''
+	]);
+	if (!is_wp_error($new_id)) {
+		update_post_meta($new_id, '_wp_page_template', 'front-page.php');
+		update_option('page_on_front', (int) $new_id);
+		update_option('show_on_front', 'page');
+		update_option('sitec_front_restored', time());
+	}
+});
+
