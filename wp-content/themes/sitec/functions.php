@@ -94,3 +94,14 @@ add_action('init', function(){
 	}
 });
 
+// Forzar el uso de front-page.php en la portada, ignorando contenido del editor o plantillas asignadas
+add_filter('template_include', function($template){
+	if ( is_front_page() ) {
+		$forced = get_stylesheet_directory() . '/front-page.php';
+		if ( file_exists($forced) ) {
+			return $forced;
+		}
+	}
+	return $template;
+}, 999);
+
