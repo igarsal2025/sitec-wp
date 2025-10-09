@@ -1,3 +1,7 @@
+Options +Includes
+AddType text/html .shtml
+AddOutputFilter INCLUDES .shtml
+
 
 # BEGIN WordPress
 # Las directivas (líneas) entre «BEGIN WordPress» y «END WordPress» son
