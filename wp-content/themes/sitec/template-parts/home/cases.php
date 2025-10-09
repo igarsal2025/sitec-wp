@@ -1,12 +1,55 @@
 <?php
-$q = new WP_Query([
-	'post_type' => 'case_study',
-	'posts_per_page' => 6,
-]);
+$count = 6;
+if ( function_exists('get_field') ) {
+    $c = (int) get_field('count_cases', get_option('page_on_front'));
+    if ($c > 0) { $count = $c; }
+}
+$orderby = 'date';
+$order = 'DESC';
+$sector_ids = [];
+if ( function_exists('get_field') ) {
+    $ob = trim((string) get_field('cases_orderby', get_option('page_on_front')));
+    if ($ob !== '') { $orderby = $ob; }
+    $od = trim((string) get_field('cases_order', get_option('page_on_front')));
+    if (in_array($od, ['ASC','DESC'], true)) { $order = $od; }
+    $raw_terms = get_field('cases_sector', get_option('page_on_front'));
+    if (!empty($raw_terms)) {
+        $sector_ids = array_values(array_filter(array_map('intval', (array) $raw_terms)));
+    }
+}
+$args = [
+    'post_type' => 'case_study',
+    'posts_per_page' => $count,
+    'orderby' => $orderby,
+    'order' => $order,
+];
+// Orden por meta si se define meta_key
+if ( function_exists('get_field') ) {
+    $meta_key = trim((string) get_field('cases_meta_key', get_option('page_on_front')));
+    if ($meta_key !== '') {
+        $args['meta_key'] = $meta_key;
+        $args['orderby'] = 'meta_value';
+    }
+}
+if (!empty($sector_ids)) {
+    $args['tax_query'] = [[
+        'taxonomy' => 'sector',
+        'field' => 'term_id',
+        'terms' => $sector_ids,
+    ]];
+}
+$q = new WP_Query($args);
 ?>
 <section class="py-16 md:py-20" id="casos">
-	<div class="mx-auto max-w-7xl px-4">
-		<h2 class="text-2xl md:text-3xl font-semibold">Proyectos que Transforman Infraestructuras Críticas</h2>
+    <div class="mx-auto max-w-7xl px-4">
+        <?php
+        $cases_heading = 'Proyectos que Transforman Infraestructuras Críticas';
+        if ( function_exists('get_field') ) {
+        	$custom = trim((string) get_field('cases_heading', get_option('page_on_front')));
+        	if ($custom !== '') { $cases_heading = $custom; }
+        }
+        ?>
+        <h2 class="text-2xl md:text-3xl font-semibold"><?php echo esc_html($cases_heading); ?></h2>
 		<div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 			<?php if ($q->have_posts()): while ($q->have_posts()): $q->the_post(); ?>
 			<article class="rounded-xl border border-slate-200 p-6 shadow-sm">

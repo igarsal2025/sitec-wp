@@ -89,6 +89,57 @@ define( 'WP_DEBUG', false );
 
 /* Add any custom values between this line and the "stop editing" line. */
 
+// ===== Ajustes de publicación / producción =====
+// Detección simple de entorno (puedes establecer WP_ENVIRONMENT_TYPE en el host)
+if ( ! defined('WP_ENVIRONMENT_TYPE') ) {
+    $host = isset($_SERVER['HTTP_HOST']) ? strtolower((string) $_SERVER['HTTP_HOST']) : '';
+    if ($host === 'localhost' || strpos($host, '.local') !== false) {
+        define('WP_ENVIRONMENT_TYPE', 'development');
+    } else {
+        define('WP_ENVIRONMENT_TYPE', getenv('WP_ENVIRONMENT_TYPE') ?: 'production');
+    }
+}
+
+// Dominios configurables por variables de entorno (no rompe local)
+if (getenv('WP_HOME'))    { define('WP_HOME',    rtrim(getenv('WP_HOME'), '/')); }
+if (getenv('WP_SITEURL')) { define('WP_SITEURL', rtrim(getenv('WP_SITEURL'), '/')); }
+
+// Seguridad básica en producción
+if (!defined('DISALLOW_FILE_EDIT')) { define('DISALLOW_FILE_EDIT', true); }
+// Si gestionas actualizaciones por despliegue, puedes desactivar modificaciones desde el admin
+// if (!defined('DISALLOW_FILE_MODS')) { define('DISALLOW_FILE_MODS', true); }
+
+// Memoria y revisiones
+if (!defined('WP_MEMORY_LIMIT'))      { define('WP_MEMORY_LIMIT', '256M'); }
+if (!defined('WP_MAX_MEMORY_LIMIT'))  { define('WP_MAX_MEMORY_LIMIT', '256M'); }
+if (!defined('WP_POST_REVISIONS'))    { define('WP_POST_REVISIONS', 10); }
+if (!defined('AUTOSAVE_INTERVAL'))    { define('AUTOSAVE_INTERVAL', 120); }
+if (!defined('EMPTY_TRASH_DAYS'))     { define('EMPTY_TRASH_DAYS', 7); }
+
+// Cron: en producción suele gestionarse por cron del sistema
+if (filter_var(getenv('DISABLE_WP_CRON') ?: '0', FILTER_VALIDATE_BOOLEAN)) {
+    define('DISABLE_WP_CRON', true);
+}
+
+// Forzar SSL en admin si el entorno lo indica (no forzar en local)
+if (filter_var(getenv('FORCE_SSL_ADMIN') ?: '0', FILTER_VALIDATE_BOOLEAN)) {
+    if (!defined('FORCE_SSL_ADMIN')) { define('FORCE_SSL_ADMIN', true); }
+}
+
+// Soporte behind proxy para HTTPS
+if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+    $_SERVER['HTTPS'] = 'on';
+}
+
+// Actualizaciones del core: solo menores por defecto
+if (!defined('WP_AUTO_UPDATE_CORE')) { define('WP_AUTO_UPDATE_CORE', 'minor'); }
+
+// Cache: actívala si existe advanced-cache.php (plugins de cache)
+if ( !defined('WP_CACHE') && defined('WP_CONTENT_DIR') && file_exists(WP_CONTENT_DIR . '/advanced-cache.php') ) {
+    define('WP_CACHE', true);
+}
+// ===== Fin ajustes =====
+
 
 
 /* That's all, stop editing! Happy publishing. */

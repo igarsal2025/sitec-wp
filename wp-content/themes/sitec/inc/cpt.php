@@ -12,7 +12,7 @@ add_action('init', function () {
 		'rewrite' => ['slug' => 'services'],
 		'show_in_rest' => true,
 		'menu_icon' => 'dashicons-hammer',
-		'supports' => ['title', 'editor', 'excerpt', 'thumbnail', 'revisions']
+		'supports' => ['title', 'editor', 'excerpt', 'thumbnail', 'revisions', 'page-attributes']
 	]);
 
 	// Case Studies
@@ -26,7 +26,7 @@ add_action('init', function () {
 		'rewrite' => ['slug' => 'cases'],
 		'show_in_rest' => true,
 		'menu_icon' => 'dashicons-chart-line',
-		'supports' => ['title', 'editor', 'excerpt', 'thumbnail', 'revisions']
+		'supports' => ['title', 'editor', 'excerpt', 'thumbnail', 'revisions', 'page-attributes']
 	]);
 
 	// Clients
@@ -57,6 +57,20 @@ add_action('init', function () {
 		'supports' => ['title', 'editor', 'excerpt', 'thumbnail', 'revisions']
 	]);
 
+	// Partners (Socios / Marcas)
+	register_post_type('partner', [
+		'labels' => [
+			'name' => __('Socios/Marcas', 'sitec'),
+			'singular_name' => __('Socio/Marca', 'sitec')
+		],
+		'public' => true,
+		'has_archive' => false,
+		'rewrite' => ['slug' => 'partners'],
+		'show_in_rest' => true,
+		'menu_icon' => 'dashicons-awards',
+		'supports' => ['title', 'thumbnail', 'page-attributes', 'revisions']
+	]);
+
 	// Taxonomy: Sector (for Case Studies and Clients)
 	register_taxonomy('sector', ['case_study', 'client'], [
 		'labels' => [
@@ -67,6 +81,18 @@ add_action('init', function () {
 		'hierarchical' => false,
 		'show_in_rest' => true,
 		'rewrite' => ['slug' => 'sector']
+	]);
+
+	// Taxonomy: Categoría de Servicio
+	register_taxonomy('service_category', ['service'], [
+		'labels' => [
+			'name' => __('Categorías de Servicio', 'sitec'),
+			'singular_name' => __('Categoría de Servicio', 'sitec')
+		],
+		'public' => true,
+		'hierarchical' => true,
+		'show_in_rest' => true,
+		'rewrite' => ['slug' => 'service-category']
 	]);
 }, 0);
 

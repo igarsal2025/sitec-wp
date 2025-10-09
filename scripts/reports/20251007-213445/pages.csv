@@ -1,0 +1,20 @@
+﻿"Url","StatusCode","Error","LoadMs","Title"
+"http://localhost/sitec/","200","","932",
+"http://localhost/sitec/services","200","","1469",
+"http://localhost/sitec/cases","200","","917",
+"http://localhost/sitec/blog","200","","830",
+"http://localhost/sitec/nosotros/","200","","551",
+"http://localhost/sitec/contacto/","200","","498",
+"http://localhost/sitec/privacy-policy","200","","843",
+"http://localhost/sitec/terms","200","","770",
+"http://localhost/sitec/services/seguridad-inteligente-con-ia-proteccion-proactiva-24-7/","200","","784",
+"http://localhost/sitec/services/conectividad-de-nueva-generacion-infraestructura-5g-ready/","200","","560",
+"http://localhost/sitec/services/energia-inteligente-eficiencia-que-reduce-costos-hasta-60/","503","Error en el servidor remoto: (503) Servidor no disponible.","0",""
+"http://localhost/sitec/services/asesoria-estrategica-su-socio-en-transformacion-tecnologica/","503","Error en el servidor remoto: (503) Servidor no disponible.","0",""
+"http://localhost/sitec/cases/hospital-general-de-acapulco/","503","Error en el servidor remoto: (503) Servidor no disponible.","0",""
+"http://localhost/sitec/cases/universidad-tecnologica-del-valle/","503","Error en el servidor remoto: (503) Servidor no disponible.","0",""
+"http://localhost/sitec/cases/hotel-fiesta-americana/","503","Error en el servidor remoto: (503) Servidor no disponible.","0",""
+"http://localhost/sitec/cases/guardia-nacional-modernizacion-de-infraestructura/","503","Error en el servidor remoto: (503) Servidor no disponible.","0",""
+"http://localhost/sitec/cases/sedena-control-de-acceso-biometrico-santa-lucia/","503","Error en el servidor remoto: (503) Servidor no disponible.","0",""
+"http://localhost/sitec/cases/ine-infraestructura-de-elecciones-digitales-2024/","503","Error en el servidor remoto: (503) Servidor no disponible.","0",""
+"http://localhost/sitec/cases/centro-comercial-plaza-milenium/","503","Error en el servidor remoto: (503) Servidor no disponible.","0",""

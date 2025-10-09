@@ -6,7 +6,7 @@ add_action('admin_init', function(){
 	check_admin_referer('sitec_seed_action');
 
 	// Helper: actualizar o crear por título
-	$upsert = function($post_type, $title, $content = '', $excerpt = ''){
+	$upsert = function($post_type, $title, $content = '', $excerpt = '', $slug = ''){
 		$exists = get_page_by_title($title, OBJECT, $post_type);
 		$args = [
 			'post_title'   => $title,
@@ -15,6 +15,7 @@ add_action('admin_init', function(){
 			'post_content' => $content,
 			'post_excerpt' => $excerpt ?: wp_trim_words(wp_strip_all_tags($content), 40, '…')
 		];
+		if (!empty($slug)) { $args['post_name'] = sanitize_title($slug); }
 		if ($exists && !is_wp_error($exists)) {
 			$args['ID'] = $exists->ID;
 			return wp_update_post($args);
@@ -25,6 +26,9 @@ add_action('admin_init', function(){
 	// Crear páginas base si no existen
 	$pages = [
 		['title' => 'Inicio', 'template' => 'front-page.php', 'option' => 'page_on_front'],
+		['title' => 'Blog', 'slug' => 'blog', 'option' => 'page_for_posts'],
+		['title' => 'Aviso de Privacidad', 'slug' => 'privacy-policy', 'content' => 'Esta es la página de aviso de privacidad. Actualice el contenido conforme a sus políticas.'],
+		['title' => 'Términos de Servicio', 'slug' => 'terms', 'content' => 'Esta es la página de términos de servicio. Actualice el contenido con sus condiciones.'],
 		['title' => 'Nosotros', 'template' => 'page-about.php', 'content' =>
 			"<h2>Más de 20 Años Construyendo el México Tecnológico del Futuro</h2>".
 			"<p>SITEC S.A. de C.V. es una empresa mexicana líder en soluciones integrales de ingeniería, seguridad electrónica y telecomunicaciones. Desde 2003, hemos sido el socio tecnológico de confianza para instituciones gubernamentales y empresas privadas que requieren infraestructuras robustas y de clase mundial.</p>".
@@ -50,18 +54,41 @@ add_action('admin_init', function(){
 		$exists = get_page_by_title($p['title']);
 		if (!$exists) {
 			$id = wp_insert_post([
-				'post_title' => $p['title'], 'post_type' => 'page', 'post_status' => 'publish', 'post_content' => ($p['content'] ?? '')
+				'post_title' => $p['title'], 'post_type' => 'page', 'post_status' => 'publish', 'post_content' => ($p['content'] ?? ''),
+				'post_name'  => !empty($p['slug']) ? sanitize_title($p['slug']) : sanitize_title($p['title'])
 			]);
 			if (!is_wp_error($id)) {
 				if (!empty($p['template'])) update_post_meta($id, '_wp_page_template', $p['template']);
 				if (!empty($p['option']) && $p['option'] === 'page_on_front') { update_option('page_on_front', $id); update_option('show_on_front', 'page'); }
+				if (!empty($p['option']) && $p['option'] === 'page_for_posts') { update_option('page_for_posts', $id); }
 			}
 		} else {
 			if (!empty($p['content'])) {
 				wp_update_post(['ID' => $exists->ID, 'post_content' => $p['content']]);
 			}
 			if (!empty($p['template'])) update_post_meta($exists->ID, '_wp_page_template', $p['template']);
+			if (!empty($p['slug'])) { wp_update_post(['ID' => $exists->ID, 'post_name' => sanitize_title($p['slug'])]); }
 			if (!empty($p['option']) && $p['option'] === 'page_on_front') { update_option('page_on_front', $exists->ID); update_option('show_on_front', 'page'); }
+			if (!empty($p['option']) && $p['option'] === 'page_for_posts') { update_option('page_for_posts', $exists->ID); }
+		}
+	}
+
+	// Sembrar bloques en "Inicio" si no tiene contenido (para edición visual inmediata)
+	$front_id_seed = (int) get_option('page_on_front');
+	if ($front_id_seed) {
+		$current = (string) get_post_field('post_content', $front_id_seed);
+		if (trim(wp_strip_all_tags($current)) === '') {
+			$blocks = '<!-- wp:cover {"dimRatio":40,"minHeight":420,"minHeightUnit":"px"} -->\n'
+				. '<div class="wp-block-cover__inner-container">'
+				. '<!-- wp:heading {"level":1} --><h1 class="wp-block-heading">Portada editable</h1><!-- /wp:heading -->'
+				. '<!-- wp:paragraph --><p>Edita estos bloques para ver los cambios inmediatos en la página de inicio.</p><!-- /wp:paragraph -->'
+				. '<!-- wp:buttons --><div class="wp-block-buttons">'
+				. '<!-- wp:button --><div class="wp-block-button"><a class="wp-block-button__link" href="' . esc_url( home_url('/contacto') ) . '">Contactar</a></div><!-- /wp:button -->'
+				. '<!-- wp:button {"className":"is-style-outline"} --><div class="wp-block-button is-style-outline"><a class="wp-block-button__link" href="#servicios">Ver servicios</a></div><!-- /wp:button -->'
+				. '</div><!-- /wp:buttons -->'
+				. '</div>'
+				. '<!-- /wp:cover -->';
+			wp_update_post(['ID' => $front_id_seed, 'post_content' => $blocks]);
 		}
 	}
 
@@ -230,6 +257,23 @@ add_action('admin_init', function(){
                 ['label' => '+500 proyectos'],
             ];
             @update_field('kpis', $kpis, $front_id);
+			// Partners demo (logotipos y enlaces de muestra)
+			$partners_demo = [
+				// Primero: UNV y Bosch
+				['logo' => ['url' => 'https://via.placeholder.com/200x60?text=UNV'], 'name' => 'UNV (Uniview)', 'url' => ''],
+				['logo' => ['url' => 'https://via.placeholder.com/200x60?text=Bosch'], 'name' => 'Bosch', 'url' => ''],
+				// Marcas principales
+				['logo' => ['url' => 'https://upload.wikimedia.org/wikipedia/commons/3/33/Axis_Communications_logo.svg'], 'name' => 'AXIS Communications', 'url' => 'https://www.axis.com/'],
+				['logo' => ['url' => 'https://upload.wikimedia.org/wikipedia/commons/6/64/Cisco_logo_blue_2016.svg'], 'name' => 'Cisco', 'url' => 'https://www.cisco.com/'],
+				['logo' => ['url' => 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Ubiquiti_Networks_logo_2015.svg'], 'name' => 'Ubiquiti', 'url' => 'https://www.ui.com/'],
+				['logo' => ['url' => 'https://upload.wikimedia.org/wikipedia/commons/a/a1/Panduit_logo.svg'], 'name' => 'Panduit', 'url' => 'https://www.panduit.com/'],
+				['logo' => ['url' => 'https://upload.wikimedia.org/wikipedia/commons/8/8d/Fluke_logo.svg'], 'name' => 'Fluke Networks', 'url' => 'https://www.flukenetworks.com/'],
+				['logo' => ['url' => 'https://upload.wikimedia.org/wikipedia/commons/5/5c/Hikvision_logo.svg'], 'name' => 'Hikvision', 'url' => 'https://www.hikvision.com/'],
+				// Al final: placeholders restantes
+				['logo' => ['url' => 'https://via.placeholder.com/200x60?text=Hytera'], 'name' => 'Hytera', 'url' => ''],
+				['logo' => ['url' => 'https://via.placeholder.com/200x60?text=EPCOM'], 'name' => 'EPCOM', 'url' => ''],
+			];
+			@update_field('partners', $partners_demo, $front_id);
         }
     }
 
@@ -258,9 +302,19 @@ add_action('admin_init', function(){
 		$u_new = sitec_normalize_url($url);
 		foreach ($items as $it) {
 			$u_old = sitec_normalize_url($it->url ?: '');
-			if ($u_old === $u_new || trim(wp_strip_all_tags($it->title)) === trim($title)) {
-				return; // ya existe
+			// Si coincide por título, actualizar URL si difiere
+			if (trim(wp_strip_all_tags($it->title)) === trim($title)) {
+				if ($u_old !== $u_new) {
+					wp_update_nav_menu_item($menu_id, $it->ID, [
+						'menu-item-title'  => $title,
+						'menu-item-url'    => $url,
+						'menu-item-status' => 'publish'
+					]);
+				}
+				return;
 			}
+			// Si coincide por URL normalizada, no hacer nada
+			if ($u_old === $u_new) { return; }
 		}
 		wp_update_nav_menu_item($menu_id, 0, [
 			'menu-item-title'  => $title,
@@ -283,24 +337,30 @@ add_action('admin_init', function(){
 		}
 	}
 
-	$home_id  = (int) get_option('page_on_front');
-	$about    = get_page_by_title('Nosotros');
-	$contact  = get_page_by_title('Contacto');
-	$home_url = $home_id ? get_permalink($home_id) : home_url('/');
+	$home_id   = (int) get_option('page_on_front');
+	$posts_id  = (int) get_option('page_for_posts');
+	$about     = get_page_by_title('Nosotros');
+	$contact   = get_page_by_title('Contacto');
+	$privacy   = get_page_by_path('privacy-policy') ?: get_page_by_title('Aviso de Privacidad');
+	$terms     = get_page_by_path('terms') ?: get_page_by_title('Términos de Servicio');
+	$home_url  = $home_id ? get_permalink($home_id) : home_url('/');
+	$blog_url  = $posts_id ? get_permalink($posts_id) : home_url('/blog');
 	$about_url = $about ? get_permalink($about) : home_url('/nosotros');
 	$contact_url = $contact ? get_permalink($contact) : home_url('/contacto');
+	$privacy_url = $privacy ? get_permalink($privacy) : home_url('/privacy-policy');
+	$terms_url   = $terms ? get_permalink($terms) : home_url('/terms');
 
 	// Ítems
 	sitec_seed_menu_item($primary_menu_id, 'Inicio', $home_url);
 	sitec_seed_menu_item($primary_menu_id, 'Servicios', home_url('/services'));
 	sitec_seed_menu_item($primary_menu_id, 'Casos de Éxito', home_url('/cases'));
-	sitec_seed_menu_item($primary_menu_id, 'Blog', home_url('/blog'));
+	sitec_seed_menu_item($primary_menu_id, 'Blog', $blog_url);
 	sitec_seed_menu_item($primary_menu_id, 'Nosotros', $about_url);
 	sitec_seed_menu_item($primary_menu_id, 'Contacto', $contact_url);
 
 	// Footer links
-	sitec_seed_menu_item($footer_menu_id, 'Aviso de Privacidad', home_url('/privacy-policy'));
-	sitec_seed_menu_item($footer_menu_id, 'Términos de Servicio', home_url('/terms'));
+	sitec_seed_menu_item($footer_menu_id, 'Aviso de Privacidad', $privacy_url);
+	sitec_seed_menu_item($footer_menu_id, 'Términos de Servicio', $terms_url);
 	sitec_seed_menu_item($footer_menu_id, 'Contacto', $contact_url);
 
 	// Deduplicar por si el seed se ejecutó previamente
@@ -323,4 +383,332 @@ add_action('admin_notices', function(){
     echo '<div class="notice notice-info"><p>Actualizar contenido real (Home, Servicios, Casos, Testimonios, Blog). <a class="button button-primary" href="'.$url.'">Aplicar contenido</a></p></div>';
 });
 
+
+// Botón para limpiar el contenido del editor de la página de Inicio (no afecta lo que muestra el sitio)
+add_action('admin_notices', function(){
+    if (!current_user_can('manage_options')) return;
+    $front_id = (int) get_option('page_on_front');
+    if (!$front_id) return;
+    $content_raw = (string) get_post_field('post_content', $front_id);
+    if (trim(wp_strip_all_tags($content_raw)) === '') return; // nada que limpiar
+    $url = wp_nonce_url( admin_url('index.php?sitec_clean_front=1'), 'sitec_clean_front_action' );
+    echo '<div class="notice notice-warning"><p>La página de Inicio tiene contenido en el editor que no se usa en el sitio. <a class="button" href="'.esc_url($url).'">Limpiar contenido de Inicio</a></p></div>';
+});
+
+add_action('admin_init', function(){
+    if (!current_user_can('manage_options')) return;
+    if (empty($_GET['sitec_clean_front'])) return;
+    check_admin_referer('sitec_clean_front_action');
+    $front_id = (int) get_option('page_on_front');
+    if ($front_id) {
+        wp_update_post(['ID' => $front_id, 'post_content' => '' ]);
+    }
+    wp_safe_redirect( admin_url('index.php?sitec_clean_front_done=1') );
+    exit;
+});
+
+add_action('admin_notices', function(){
+    if (!current_user_can('manage_options')) return;
+    if (empty($_GET['sitec_clean_front_done'])) return;
+    echo '<div class="notice notice-success is-dismissible"><p>Contenido del editor en “Inicio” limpiado. La portada seguirá usando las secciones del tema.</p></div>';
+});
+
+// Metabox en la edición de Página para sembrar bloques solo en esa página (principalmente "Inicio")
+add_action('add_meta_boxes', function(){
+    add_meta_box('sitec_seed_page_blocks', __('Sembrar bloques de portada','sitec'), function($post){
+        if (!current_user_can('manage_options')) return;
+        $front_id = (int) get_option('page_on_front');
+        if ((int)$post->ID !== $front_id) {
+            echo '<p>' . esc_html__('Este botón está disponible solo para la página establecida como “Inicio”.','sitec') . '</p>';
+            return;
+        }
+        $url = add_query_arg(['sitec_seed_page' => (int)$post->ID], admin_url('post.php?post='.(int)$post->ID.'&action=edit'));
+        $url = wp_nonce_url($url, 'sitec_seed_page_action');
+        echo '<p>' . esc_html__('Reemplaza el contenido actual por bloques de portada preconfigurados.','sitec') . '</p>';
+        echo '<a class="button button-primary" href="'.esc_url($url).'">' . esc_html__('Sembrar bloques','sitec') . '</a>';
+    }, 'page', 'side', 'high');
+});
+
+// Acción para procesar el sembrado desde el metabox
+add_action('admin_init', function(){
+    if (!current_user_can('manage_options')) return;
+    if (empty($_GET['sitec_seed_page'])) return;
+    check_admin_referer('sitec_seed_page_action');
+    $page_id = (int) $_GET['sitec_seed_page'];
+    if ($page_id <= 0) return;
+
+    // Leer valores de ACF del Hero si existen
+    $front_id = (int) get_option('page_on_front');
+    $hero_title = function_exists('get_field') ? trim((string) get_field('hero_title', $front_id)) : '';
+    $hero_text  = function_exists('get_field') ? trim((string) get_field('hero_text', $front_id)) : '';
+    $cta1_label = function_exists('get_field') ? trim((string) get_field('hero_cta_primary_label', $front_id)) : '';
+    $cta1_url   = function_exists('get_field') ? trim((string) get_field('hero_cta_primary_url', $front_id)) : '';
+    $cta2_label = function_exists('get_field') ? trim((string) get_field('hero_cta_secondary_label', $front_id)) : '';
+    $cta2_url   = function_exists('get_field') ? trim((string) get_field('hero_cta_secondary_url', $front_id)) : '';
+    if ($hero_title === '') { $hero_title = 'Ingeniería que Conecta y Protege a México'; }
+    if ($hero_text === '') { $hero_text = 'Más de 20 años transformando infraestructuras críticas con tecnología de vanguardia.'; }
+    if ($cta1_label === '') { $cta1_label = 'Consultoría Gratuita'; }
+    if ($cta1_url === '') { $cta1_url = (string) ( get_permalink( get_page_by_path('contacto') ) ?: home_url('/contacto') ); }
+    if ($cta2_label === '') { $cta2_label = 'Ver Proyectos Destacados'; }
+    if ($cta2_url === '') { $cta2_url = '#servicios'; }
+
+    $blocks = '<!-- wp:cover {"dimRatio":40,"minHeight":420,"minHeightUnit":"px"} -->\n'
+        . '<div class="wp-block-cover__inner-container">'
+        . '<!-- wp:heading {"level":1} --><h1 class="wp-block-heading">' . esc_html($hero_title) . '</h1><!-- /wp:heading -->'
+        . '<!-- wp:paragraph --><p>' . esc_html($hero_text) . '</p><!-- /wp:paragraph -->'
+        . '<!-- wp:buttons --><div class="wp-block-buttons">'
+        . '<!-- wp:button --><div class="wp-block-button"><a class="wp-block-button__link" href="' . esc_url( $cta1_url ) . '">' . esc_html($cta1_label) . '</a></div><!-- /wp:button -->'
+        . '<!-- wp:button {"className":"is-style-outline"} --><div class="wp-block-button is-style-outline"><a class="wp-block-button__link" href="' . esc_url( $cta2_url ) . '">' . esc_html($cta2_label) . '</a></div><!-- /wp:button -->'
+        . '</div><!-- /wp:buttons -->'
+        . '</div>'
+        . '<!-- /wp:cover -->';
+
+    wp_update_post(['ID' => $page_id, 'post_content' => $blocks]);
+    wp_safe_redirect( admin_url('post.php?post='.$page_id.'&action=edit&sitec_seed_done=1') );
+    exit;
+});
+
+// Aviso de éxito al volver al editor de la página
+add_action('admin_notices', function(){
+    if (!current_user_can('manage_options')) return;
+    if (empty($_GET['sitec_seed_done'])) return;
+    $screen = get_current_screen();
+    if (!$screen || $screen->id !== 'page') return;
+    echo '<div class="notice notice-success is-dismissible"><p>'.esc_html__('Bloques de portada insertados correctamente. Guarda para conservar cambios.','sitec').'</p></div>';
+});
+
+
+// Metabox: Restablecer Hero a valores por defecto en la página Inicio
+add_action('add_meta_boxes', function(){
+    add_meta_box('sitec_reset_hero', __('Restablecer Hero','sitec'), function($post){
+        if (!current_user_can('manage_options')) return;
+        $front_id = (int) get_option('page_on_front');
+        if ((int)$post->ID !== $front_id) return;
+        $url = add_query_arg(['sitec_reset_hero' => (int)$post->ID], admin_url('post.php?post='.(int)$post->ID.'&action=edit'));
+        $url = wp_nonce_url($url, 'sitec_reset_hero_action');
+        echo '<p>'.esc_html__('Restaura el Hero a los textos y estilos por defecto del tema. No afecta otras secciones.','sitec').'</p>';
+        echo '<a class="button" href="'.esc_url($url).'">'.esc_html__('Restablecer Hero','sitec').'</a>';
+    }, 'page', 'side', 'low');
+});
+
+// Acción: procesar restablecimiento del Hero
+add_action('admin_init', function(){
+    if (!current_user_can('manage_options')) return;
+    if (empty($_GET['sitec_reset_hero'])) return;
+    check_admin_referer('sitec_reset_hero_action');
+    $page_id = (int) $_GET['sitec_reset_hero'];
+    if ($page_id <= 0) return;
+
+    // Valores por defecto tomados de la plantilla
+    $defaults = [
+        'hero_title' => 'Ingeniería que Conecta y Protege a México',
+        'hero_text'  => 'Más de 20 años transformando infraestructuras críticas con tecnología de vanguardia. Soluciones integrales en seguridad, telecomunicaciones y energía respaldadas por proyectos con Guardia Nacional, SEDENA e INE.',
+        'hero_cta_primary_label' => 'Consultoría Gratuita',
+        'hero_cta_primary_url'   => (string) ( get_permalink( get_page_by_path('contacto') ) ?: home_url('/contacto') ),
+        'hero_cta_secondary_label' => 'Ver Proyectos Destacados',
+        'hero_cta_secondary_url'   => (string) ( get_post_type_archive_link('case_study') ?: home_url('/cases') ),
+        'hero_overlay_color'   => '#0f172a',
+        'hero_overlay_opacity' => 85,
+        'hero_alignment' => 'left',
+        'hero_height'    => 'normal',
+        'hero_img_fit'   => 'cover',
+        'hero_img_position' => 'center',
+    ];
+
+    if ( function_exists('update_field') ) {
+        foreach ($defaults as $k=>$v) { @update_field($k, $v, $page_id); }
+        // Vaciar imagen
+        @update_field('hero_image', null, $page_id);
+    } else {
+        foreach ($defaults as $k=>$v) { update_post_meta($page_id, $k, $v); }
+        delete_post_meta($page_id, 'hero_image');
+    }
+
+    wp_safe_redirect( admin_url('post.php?post='.$page_id.'&action=edit&sitec_reset_hero_done=1') );
+    exit;
+});
+
+// Aviso de éxito al restablecer Hero
+add_action('admin_notices', function(){
+    if (!current_user_can('manage_options')) return;
+    if (empty($_GET['sitec_reset_hero_done'])) return;
+    $screen = get_current_screen();
+    if (!$screen || $screen->id !== 'page') return;
+    echo '<div class="notice notice-success is-dismissible"><p>'.esc_html__('Hero restablecido a valores por defecto.','sitec').'</p></div>';
+});
+
+
+// Sincronización diaria de páginas legales y menús (idempotente)
+add_action('admin_init', function(){
+    if (!current_user_can('manage_options')) return;
+    if (get_transient('sitec_daily_sync_done')) return;
+
+    $ensure_page = function($title, $slug, $content = '', $opt = ''){
+        $existing = get_page_by_path($slug) ?: get_page_by_title($title);
+        if ($existing && !is_wp_error($existing)) {
+            wp_update_post(['ID' => $existing->ID, 'post_name' => sanitize_title($slug)]);
+            $page_id = (int) $existing->ID;
+        } else {
+            $page_id = (int) wp_insert_post([
+                'post_title' => $title,
+                'post_name'  => sanitize_title($slug),
+                'post_type'  => 'page',
+                'post_status'=> 'publish',
+                'post_content'=> $content,
+            ]);
+        }
+        if ($page_id && !is_wp_error($page_id)) {
+            if ($opt === 'page_for_posts') { update_option('page_for_posts', $page_id); }
+            if ($opt === 'page_on_front') { update_option('page_on_front', $page_id); update_option('show_on_front', 'page'); }
+        }
+        return $page_id;
+    };
+
+    $blog_id    = $ensure_page('Blog', 'blog', '', 'page_for_posts');
+    $privacy_id = $ensure_page('Aviso de Privacidad', 'privacy-policy', 'Esta es la página de aviso de privacidad. Actualice el contenido conforme a sus políticas.');
+    $terms_id   = $ensure_page('Términos de Servicio', 'terms', 'Esta es la página de términos de servicio. Actualice el contenido con sus condiciones.');
+
+    $home_id    = (int) get_option('page_on_front');
+    $about      = get_page_by_title('Nosotros');
+    $contact    = get_page_by_title('Contacto');
+    $home_url   = $home_id ? get_permalink($home_id) : home_url('/');
+    $blog_url   = $blog_id ? get_permalink($blog_id) : home_url('/blog');
+    $about_url  = $about ? get_permalink($about) : home_url('/nosotros');
+    $contact_url= $contact ? get_permalink($contact) : home_url('/contacto');
+    $privacy_url= $privacy_id ? get_permalink($privacy_id) : home_url('/privacy-policy');
+    $terms_url  = $terms_id ? get_permalink($terms_id) : home_url('/terms');
+
+    $primary_menu = wp_get_nav_menu_object('Principal');
+    if (!$primary_menu) { $primary_menu_id = (int) wp_create_nav_menu('Principal'); } else { $primary_menu_id = (int) $primary_menu->term_id; }
+    $footer_menu = wp_get_nav_menu_object('Footer');
+    if (!$footer_menu) { $footer_menu_id = (int) wp_create_nav_menu('Footer'); } else { $footer_menu_id = (int) $footer_menu->term_id; }
+
+    $normalize = function($u){ return trailingslashit(strtolower((string)$u)); };
+    $ensure_menu_item = function($menu_id, $title, $url) use ($normalize){
+        if (!$menu_id) return;
+        $items = wp_get_nav_menu_items($menu_id) ?: [];
+        $new_u = $normalize($url);
+        foreach ($items as $it) {
+            $old_u = $normalize($it->url ?: '');
+            if (trim(wp_strip_all_tags($it->title)) === trim($title)) {
+                if ($old_u !== $new_u) {
+                    wp_update_nav_menu_item($menu_id, $it->ID, [
+                        'menu-item-title' => $title,
+                        'menu-item-url'   => $url,
+                        'menu-item-status'=> 'publish',
+                    ]);
+                }
+                return;
+            }
+            if ($old_u === $new_u) { return; }
+        }
+        wp_update_nav_menu_item($menu_id, 0, [
+            'menu-item-title' => $title,
+            'menu-item-url'   => $url,
+            'menu-item-status'=> 'publish',
+        ]);
+    };
+
+    $ensure_menu_item($primary_menu_id, 'Inicio', $home_url);
+    $ensure_menu_item($primary_menu_id, 'Servicios', home_url('/services'));
+    $ensure_menu_item($primary_menu_id, 'Casos de Éxito', home_url('/cases'));
+    $ensure_menu_item($primary_menu_id, 'Blog', $blog_url);
+    $ensure_menu_item($primary_menu_id, 'Nosotros', $about_url);
+    $ensure_menu_item($primary_menu_id, 'Contacto', $contact_url);
+
+    $ensure_menu_item($footer_menu_id, 'Aviso de Privacidad', $privacy_url);
+    $ensure_menu_item($footer_menu_id, 'Términos de Servicio', $terms_url);
+    $ensure_menu_item($footer_menu_id, 'Contacto', $contact_url);
+
+    set_transient('sitec_daily_sync_done', 1, DAY_IN_SECONDS);
+});
+
+// Aviso en admin: migrar partners ACF -> CPT
+add_action('admin_notices', function(){
+    if (!current_user_can('manage_options')) return;
+    $front_id = (int) get_option('page_on_front');
+    if (!$front_id) return;
+    if (!function_exists('have_rows') || !have_rows('partners', $front_id)) return;
+    $url = wp_nonce_url( admin_url('index.php?sitec_migrate_partners=1'), 'sitec_migrate_partners_action' );
+    echo '<div class="notice notice-info"><p>¿Desea migrar los logos del repeater ACF a "Socios/Marcas" para administrarlos como entradas? <a class="button" href="'.esc_url($url).'">Migrar Partners (ACF → CPT)</a></p></div>';
+});
+
+// Acción: procesar migración de partners ACF -> CPT
+add_action('admin_init', function(){
+    if (!current_user_can('manage_options')) return;
+    if (empty($_GET['sitec_migrate_partners'])) return;
+    check_admin_referer('sitec_migrate_partners_action');
+
+    $front_id = (int) get_option('page_on_front');
+    if (!$front_id) {
+        wp_safe_redirect( admin_url('index.php?sitec_migrate_partners_done=1&created=0&updated=0') );
+        exit;
+    }
+
+    $created = 0; $updated = 0; $order = 0;
+    if ( function_exists('have_rows') && have_rows('partners', $front_id) ) {
+        // Cargar helpers de media para sideload si se ocupan
+        if (!function_exists('media_sideload_image')) {
+            require_once ABSPATH . 'wp-admin/includes/media.php';
+            require_once ABSPATH . 'wp-admin/includes/file.php';
+            require_once ABSPATH . 'wp-admin/includes/image.php';
+        }
+        while ( have_rows('partners', $front_id) ) { the_row();
+            $name = trim((string) get_sub_field('name'));
+            $url  = trim((string) get_sub_field('url'));
+            $logo = get_sub_field('logo');
+            $logo_id = 0;
+            $logo_url = '';
+            if (is_array($logo)) {
+                if (!empty($logo['id'])) { $logo_id = (int) $logo['id']; }
+                if (!$logo_id && !empty($logo['ID'])) { $logo_id = (int) $logo['ID']; }
+                if (!empty($logo['url'])) { $logo_url = (string) $logo['url']; }
+            }
+
+            if ($name === '' && $logo_id === 0 && $logo_url === '') { continue; }
+
+            $post_title = $name !== '' ? $name : ('Socio ' . ($order + 1));
+            $existing = get_page_by_title($post_title, OBJECT, 'partner');
+            $args = [
+                'post_type' => 'partner',
+                'post_status' => 'publish',
+                'menu_order' => $order,
+            ];
+            $partner_id = 0;
+            if ($existing && !is_wp_error($existing)) {
+                $args['ID'] = (int) $existing->ID;
+                $partner_id = (int) wp_update_post($args);
+                if (!is_wp_error($partner_id)) { $updated++; }
+            } else {
+                $args['post_title'] = $post_title;
+                $partner_id = (int) wp_insert_post($args);
+                if (!is_wp_error($partner_id) && $partner_id) { $created++; }
+            }
+            if ($partner_id && !is_wp_error($partner_id)) {
+                if ( function_exists('update_field') ) { @update_field('website_url', $url, $partner_id); }
+                // Asignar logo
+                if ($logo_id > 0) {
+                    set_post_thumbnail($partner_id, $logo_id);
+                } elseif ($logo_url !== '' && function_exists('media_sideload_image')) {
+                    $att_id = @media_sideload_image($logo_url, $partner_id, $post_title, 'id');
+                    if (!is_wp_error($att_id) && (int)$att_id > 0) { set_post_thumbnail($partner_id, (int)$att_id); }
+                }
+            }
+            $order++;
+        }
+    }
+
+    wp_safe_redirect( admin_url('index.php?sitec_migrate_partners_done=1&created='.(int)$created.'&updated='.(int)$updated) );
+    exit;
+});
+
+// Aviso de éxito de migración
+add_action('admin_notices', function(){
+    if (!current_user_can('manage_options')) return;
+    if (empty($_GET['sitec_migrate_partners_done'])) return;
+    $created = isset($_GET['created']) ? (int) $_GET['created'] : 0;
+    $updated = isset($_GET['updated']) ? (int) $_GET['updated'] : 0;
+    $link = esc_url( admin_url('edit.php?post_type=partner') );
+    echo '<div class="notice notice-success is-dismissible"><p>Partners migrados. Creados: <strong>'.(int)$created.'</strong>, Actualizados: <strong>'.(int)$updated.'</strong>. <a href="'.$link.'">Ver Socios/Marcas</a></p></div>';
+});
 

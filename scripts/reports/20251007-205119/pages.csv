@@ -1,0 +1,20 @@
+﻿"Url","StatusCode","Error","LoadMs","Title"
+"http://localhost/sitec/","200","","744",
+"http://localhost/sitec/services","200","","1357",
+"http://localhost/sitec/cases","200","","1588",
+"http://localhost/sitec/blog","404","Error en el servidor remoto: (404) No se encontró.","0",""
+"http://localhost/sitec/nosotros/","200","","744",
+"http://localhost/sitec/contacto/","200","","676",
+"http://localhost/sitec/privacy-policy","404","Error en el servidor remoto: (404) No se encontró.","0",""
+"http://localhost/sitec/terms","404","Error en el servidor remoto: (404) No se encontró.","0",""
+"http://localhost/sitec/services/seguridad-inteligente-con-ia-proteccion-proactiva-24-7/","200","","718",
+"http://localhost/sitec/services/conectividad-de-nueva-generacion-infraestructura-5g-ready/","200","","725",
+"http://localhost/sitec/services/energia-inteligente-eficiencia-que-reduce-costos-hasta-60/","200","","688",
+"http://localhost/sitec/services/asesoria-estrategica-su-socio-en-transformacion-tecnologica/","200","","749",
+"http://localhost/sitec/cases/hospital-general-de-acapulco/","200","","718",
+"http://localhost/sitec/cases/universidad-tecnologica-del-valle/","200","","692",
+"http://localhost/sitec/cases/hotel-fiesta-americana/","200","","696",
+"http://localhost/sitec/cases/guardia-nacional-modernizacion-de-infraestructura/","200","","721",
+"http://localhost/sitec/cases/sedena-control-de-acceso-biometrico-santa-lucia/","200","","705",
+"http://localhost/sitec/cases/ine-infraestructura-de-elecciones-digitales-2024/","200","","713",
+"http://localhost/sitec/cases/centro-comercial-plaza-milenium/","200","","655",

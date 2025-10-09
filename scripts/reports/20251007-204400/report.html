@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Reporte de Pruebas Funcionales</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 24px; }
+    h1 { font-size: 20px; }
+    .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .card { border: 1px solid #ddd; padding: 12px; border-radius: 6px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 16px; }
+    th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid #eee; }
+    th { background: #fafafa; }
+    .muted { color: #666; }
+  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="generated" content="20251007-204400" />
+  <meta name="base-url" content="http://localhost/sitec/" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline';" />
+  <script>/* no-op */</script>
+  <!-- Nota: reporte estÃ¡tico generado por site_smoke_tests.ps1 -->
+</head>
+<body>
+  <h1>Reporte de Pruebas Funcionales</h1>
+  <p class="muted">Base: http://localhost/sitec/ Â· Fecha: 10/07/2025 20:47:19</p>
+  <div class="grid">
+    <div class="card"><strong>PÃ¡ginas OK</strong><div>16</div></div>
+    <div class="card"><strong>PÃ¡ginas con error</strong><div>3</div></div>
+    <div class="card"><strong>Enlaces rotos</strong><div>48</div></div>
+    <div class="card"><strong>Assets rotos</strong><div>0</div></div>
+  </div>
+  <h2>Top pÃ¡ginas con error</h2>
+  <table>
+    <thead><tr><th>URL</th><th>Status</th><th>Error</th></tr></thead>
+    <tbody>    <tr><td><a href='http://localhost/sitec/blog'>http://localhost/sitec/blog</a></td><td>404</td><td>Error en el servidor remoto: (404) No se encontró.</td></tr>
+    <tr><td><a href='http://localhost/sitec/privacy-policy'>http://localhost/sitec/privacy-policy</a></td><td>404</td><td>Error en el servidor remoto: (404) No se encontró.</td></tr>
+    <tr><td><a href='http://localhost/sitec/terms'>http://localhost/sitec/terms</a></td><td>404</td><td>Error en el servidor remoto: (404) No se encontró.</td></tr>
+    </tbody>
+  </table>
+  <p>Archivos CSV: <code>pages.csv</code>, <code>broken_links.csv</code>, <code>broken_assets.csv</code></p>
+</body>
+</html>
