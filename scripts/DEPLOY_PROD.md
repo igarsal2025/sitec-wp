@@ -31,3 +31,5 @@
 - `DISALLOW_FILE_EDIT` activo.
 - Usuarios con 2FA.
 
+
+
