@@ -39,10 +39,11 @@ jobs:
         with:
           switches: -az --delete --exclude-from=.rsyncignore
           path: ./
-          remote_path: ${{ secrets.SITEC_PROD_REMOTE_PATH }}
+          remote_path: ${{ secrets.SITEC_PROD_REMOTE_PATH || '/home3/edaaeffm/public_html' }}
           remote_host: ${{ secrets.SITEC_PROD_REMOTE_HOST }}
           remote_user: ${{ secrets.SITEC_PROD_REMOTE_USER }}
           remote_key: ${{ secrets.SITEC_PROD_SSH_KEY }}
+          remote_port: 22
 
       - name: Deploy via rsync (staging)
         if: steps.envmap.outputs.env == 'staging'
@@ -50,10 +51,11 @@ jobs:
         with:
           switches: -az --delete --exclude-from=.rsyncignore
           path: ./
-          remote_path: ${{ secrets.SITEC_STAGING_REMOTE_PATH }}
+          remote_path: ${{ secrets.SITEC_STAGING_REMOTE_PATH || '/home3/edaaeffm/public_html' }}
           remote_host: ${{ secrets.SITEC_STAGING_REMOTE_HOST }}
           remote_user: ${{ secrets.SITEC_STAGING_REMOTE_USER }}
           remote_key: ${{ secrets.SITEC_STAGING_SSH_KEY }}
+          remote_port: 22
 
       - name: Deploy via rsync (dev)
         if: steps.envmap.outputs.env == 'dev'
@@ -61,9 +63,10 @@ jobs:
         with:
           switches: -az --delete --exclude-from=.rsyncignore
           path: ./
-          remote_path: ${{ secrets.SITEC_DEV_REMOTE_PATH }}
+          remote_path: ${{ secrets.SITEC_DEV_REMOTE_PATH || '/home3/edaaeffm/public_html' }}
           remote_host: ${{ secrets.SITEC_DEV_REMOTE_HOST }}
           remote_user: ${{ secrets.SITEC_DEV_REMOTE_USER }}
           remote_key: ${{ secrets.SITEC_DEV_SSH_KEY }}
+          remote_port: 22
 
 
