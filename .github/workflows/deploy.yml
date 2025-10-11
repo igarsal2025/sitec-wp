@@ -33,14 +33,37 @@ jobs:
           if [ "${GITHUB_REF##*/}" = "staging" ]; then echo "env=staging" >> $GITHUB_OUTPUT; fi
           if [ "${GITHUB_REF##*/}" = "dev" ]; then echo "env=dev" >> $GITHUB_OUTPUT; fi
 
-      - name: Deploy via rsync
+      - name: Deploy via rsync (prod)
+        if: steps.envmap.outputs.env == 'prod'
         uses: burnett01/rsync-deployments@6.0.0
         with:
           switches: -az --delete --exclude-from=.rsyncignore
           path: ./
-          remote_path: ${{ secrets.SITEC_${{ steps.envmap.outputs.env }}_REMOTE_PATH }}
-          remote_host: ${{ secrets.SITEC_${{ steps.envmap.outputs.env }}_REMOTE_HOST }}
-          remote_user: ${{ secrets.SITEC_${{ steps.envmap.outputs.env }}_REMOTE_USER }}
-          remote_key: ${{ secrets.SITEC_${{ steps.envmap.outputs.env }}_SSH_KEY }}
+          remote_path: ${{ secrets.SITEC_PROD_REMOTE_PATH }}
+          remote_host: ${{ secrets.SITEC_PROD_REMOTE_HOST }}
+          remote_user: ${{ secrets.SITEC_PROD_REMOTE_USER }}
+          remote_key: ${{ secrets.SITEC_PROD_SSH_KEY }}
+
+      - name: Deploy via rsync (staging)
+        if: steps.envmap.outputs.env == 'staging'
+        uses: burnett01/rsync-deployments@6.0.0
+        with:
+          switches: -az --delete --exclude-from=.rsyncignore
+          path: ./
+          remote_path: ${{ secrets.SITEC_STAGING_REMOTE_PATH }}
+          remote_host: ${{ secrets.SITEC_STAGING_REMOTE_HOST }}
+          remote_user: ${{ secrets.SITEC_STAGING_REMOTE_USER }}
+          remote_key: ${{ secrets.SITEC_STAGING_SSH_KEY }}
+
+      - name: Deploy via rsync (dev)
+        if: steps.envmap.outputs.env == 'dev'
+        uses: burnett01/rsync-deployments@6.0.0
+        with:
+          switches: -az --delete --exclude-from=.rsyncignore
+          path: ./
+          remote_path: ${{ secrets.SITEC_DEV_REMOTE_PATH }}
+          remote_host: ${{ secrets.SITEC_DEV_REMOTE_HOST }}
+          remote_user: ${{ secrets.SITEC_DEV_REMOTE_USER }}
+          remote_key: ${{ secrets.SITEC_DEV_SSH_KEY }}
 
 
