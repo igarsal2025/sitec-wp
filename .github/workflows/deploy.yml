@@ -44,6 +44,30 @@ jobs:
           if [ -z "$VAL" ]; then VAL="$DEFAULT_PATH"; fi
           echo "path=$VAL" >> $GITHUB_OUTPUT
 
+      - name: Preflight SSH inputs (prod)
+        if: steps.envmap.outputs.env == 'prod'
+        shell: bash
+        run: |
+          if [ -z "${{ secrets.SITEC_PROD_REMOTE_HOST }}" ]; then echo "Falta secreto SITEC_PROD_REMOTE_HOST"; exit 1; fi
+          if [ -z "${{ secrets.SITEC_PROD_REMOTE_USER }}" ]; then echo "Falta secreto SITEC_PROD_REMOTE_USER"; exit 1; fi
+          if [ -z "${{ secrets.SITEC_PROD_SSH_KEY }}" ]; then echo "Falta secreto SITEC_PROD_SSH_KEY (clave privada OpenSSH sin passphrase o proveer *_SSH_KEY_PASS)"; exit 1; fi
+
+      - name: Preflight SSH inputs (staging)
+        if: steps.envmap.outputs.env == 'staging'
+        shell: bash
+        run: |
+          if [ -z "${{ secrets.SITEC_STAGING_REMOTE_HOST }}" ]; then echo "Falta secreto SITEC_STAGING_REMOTE_HOST"; exit 1; fi
+          if [ -z "${{ secrets.SITEC_STAGING_REMOTE_USER }}" ]; then echo "Falta secreto SITEC_STAGING_REMOTE_USER"; exit 1; fi
+          if [ -z "${{ secrets.SITEC_STAGING_SSH_KEY }}" ]; then echo "Falta secreto SITEC_STAGING_SSH_KEY (clave privada OpenSSH sin passphrase o proveer *_SSH_KEY_PASS)"; exit 1; fi
+
+      - name: Preflight SSH inputs (dev)
+        if: steps.envmap.outputs.env == 'dev'
+        shell: bash
+        run: |
+          if [ -z "${{ secrets.SITEC_DEV_REMOTE_HOST }}" ]; then echo "Falta secreto SITEC_DEV_REMOTE_HOST"; exit 1; fi
+          if [ -z "${{ secrets.SITEC_DEV_REMOTE_USER }}" ]; then echo "Falta secreto SITEC_DEV_REMOTE_USER"; exit 1; fi
+          if [ -z "${{ secrets.SITEC_DEV_SSH_KEY }}" ]; then echo "Falta secreto SITEC_DEV_SSH_KEY (clave privada OpenSSH sin passphrase o proveer *_SSH_KEY_PASS)"; exit 1; fi
+
       - name: Deploy via rsync (prod)
         if: steps.envmap.outputs.env == 'prod'
         uses: burnett01/rsync-deployments@6.0.0
@@ -55,6 +79,7 @@ jobs:
           remote_user: ${{ secrets.SITEC_PROD_REMOTE_USER }}
           remote_key: ${{ secrets.SITEC_PROD_SSH_KEY }}
           remote_port: 22
+          remote_key_pass: ${{ secrets.SITEC_PROD_SSH_KEY_PASS }}
 
       - name: Deploy via rsync (staging)
         if: steps.envmap.outputs.env == 'staging'
@@ -67,6 +92,7 @@ jobs:
           remote_user: ${{ secrets.SITEC_STAGING_REMOTE_USER }}
           remote_key: ${{ secrets.SITEC_STAGING_SSH_KEY }}
           remote_port: 22
+          remote_key_pass: ${{ secrets.SITEC_STAGING_SSH_KEY_PASS }}
 
       - name: Deploy via rsync (dev)
         if: steps.envmap.outputs.env == 'dev'
@@ -79,5 +105,6 @@ jobs:
           remote_user: ${{ secrets.SITEC_DEV_REMOTE_USER }}
           remote_key: ${{ secrets.SITEC_DEV_SSH_KEY }}
           remote_port: 22
+          remote_key_pass: ${{ secrets.SITEC_DEV_SSH_KEY_PASS }}
 
 
