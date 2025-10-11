@@ -14,6 +14,12 @@ deployment:
         --exclude ".cpanel.yml" \
         --exclude "render.yaml" \
         --exclude "scripts/" \
+        --exclude ".env" \
+        --exclude ".env.*" \
+        --exclude ".htaccess" \
+        --exclude "wp-content/uploads/" \
+        --exclude "wp-content/upgrade/" \
+        --exclude "wp-content/cache/" \
         --exclude "*.md" \
         ./ "$DEPLOYPATH"
 

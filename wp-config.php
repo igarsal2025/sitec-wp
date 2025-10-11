@@ -18,6 +18,34 @@
  * @package WordPress
  */
 
+// Cargar variables desde archivo .env si existe (permite configurar DB sin exponer secretos)
+$sitecEnvPath = __DIR__ . '/.env';
+if (is_readable($sitecEnvPath)) {
+    $lines = @file($sitecEnvPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    if (is_array($lines)) {
+        foreach ($lines as $line) {
+            $trimmed = ltrim($line);
+            if ($trimmed === '' || $trimmed[0] === '#') { continue; }
+            $pos = strpos($line, '=');
+            if ($pos === false) { continue; }
+            $key = trim(substr($line, 0, $pos));
+            $value = trim(substr($line, $pos + 1));
+            if (strlen($value) >= 2) {
+                $first = $value[0];
+                $last  = substr($value, -1);
+                if (($first === '"' && $last === '"') || ($first === "'" && $last === "'")) {
+                    $value = substr($value, 1, -1);
+                }
+            }
+            if ($key !== '') {
+                if (function_exists('putenv')) { @putenv($key . '=' . $value); }
+                $_ENV[$key] = $value;
+                if (!isset($_SERVER[$key])) { $_SERVER[$key] = $value; }
+            }
+        }
+    }
+}
+
 // ** Database settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
 define( 'DB_NAME', getenv('DB_NAME') ?: 'db_sitecweb' );
