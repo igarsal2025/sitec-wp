@@ -1,0 +1,23 @@
+---
+deployment:
+  tasks:
+    # Define el directorio de despliegue (docroot). Ajusta si tu sitio vive en un subdirectorio.
+    - export DEPLOYPATH=/home3/edaaeffm/public_html
+
+    # Crea el directorio de destino si no existe
+    - mkdir -p "$DEPLOYPATH"
+
+    # Sincroniza el contenido del repo al docroot, excluyendo archivos que no deben publicarse
+    - rsync -az --delete \
+        --exclude ".git" \
+        --exclude ".gitignore" \
+        --exclude ".cpanel.yml" \
+        --exclude "render.yaml" \
+        --exclude "scripts/" \
+        --exclude "*.md" \
+        ./ "$DEPLOYPATH"
+
+    # Mensaje de confirmación
+    - echo "Despliegue completado en $DEPLOYPATH"
+
+
