@@ -37,6 +37,7 @@ jobs:
           echo "deployed $(date -u +'%Y-%m-%dT%H:%M:%SZ') from $GITHUB_REPOSITORY@$GITHUB_SHA" > deploy.txt
 
       - name: Sync files via SFTP
+        continue-on-error: true
         uses: wlixcc/SFTP-Deploy-Action@v1.2.5
         with:
           server: ${{ secrets.SFTP_HOST }}
@@ -55,6 +56,28 @@ jobs:
             node_modules/**
             vendor/**
             *.md
+            Dockerfile
+            render.yaml
+            ssi-test.shtml
+
+      - name: Sync files via FTPS (fallback)
+        uses: SamKirkland/FTP-Deploy-Action@v4
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          port: ${{ secrets.FTP_PORT }}
+          local-dir: ./
+          server-dir: ${{ secrets.FTP_DEST_PATH }}
+          exclude: |
+            **/.git*
+            **/.github/**
+            scripts/reports/**
+            wp-content/uploads/**
+            **/node_modules/**
+            **/vendor/**
+            **/*.md
             Dockerfile
             render.yaml
             ssi-test.shtml
