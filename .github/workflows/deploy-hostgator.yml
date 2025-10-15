@@ -1,0 +1,57 @@
+name: Deploy to HostGator (SFTP)
+
+on:
+  push:
+    branches: [ "dev" ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: hostgator-deploy
+      cancel-in-progress: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate .env from secrets
+        run: |
+          cat > .env << 'EOF'
+          DB_NAME=${{ secrets.DB_NAME }}
+          DB_USER=${{ secrets.DB_USER }}
+          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+          DB_HOST=${{ secrets.DB_HOST }}
+
+          WP_HOME=${{ secrets.WP_HOME }}
+          WP_SITEURL=${{ secrets.WP_SITEURL }}
+          FORCE_SSL_ADMIN=1
+          DISABLE_WP_CRON=1
+          WP_ENVIRONMENT_TYPE=production
+          EOF
+
+      - name: Sync files via SFTP
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.5
+        with:
+          server: ${{ secrets.SFTP_HOST }}
+          port: ${{ secrets.SFTP_PORT }}
+          username: ${{ secrets.SFTP_USER }}
+          password: ${{ secrets.SFTP_PASSWORD }}
+          local_path: ./
+          remote_path: ${{ secrets.SFTP_DEST_PATH }}
+          sftp_only: true
+          delete: false
+          exclude: |
+            .git*
+            .github/**
+            scripts/reports/**
+            wp-content/uploads/**
+            node_modules/**
+            vendor/**
+            *.md
+            Dockerfile
+            render.yaml
+            ssi-test.shtml
+

@@ -8,11 +8,21 @@ RewriteCond %{HTTPS} !=on
 RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
 # WordPress
+# Si este archivo vive DENTRO de la carpeta del sitio (p. ej. /public_html/sitec/.htaccess),
+# usa base raíz:
 RewriteBase /
 RewriteRule ^index\.php$ - [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . /index.php [L]
+
+# Si en tu hosting el .htaccess está en el ROOT del dominio pero WordPress
+# está en una SUBCARPETA (p. ej. /sitec), entonces usa esta variante:
+# RewriteBase /sitec/
+# RewriteRule ^index\.php$ - [L]
+# RewriteCond %{REQUEST_FILENAME} !-f
+# RewriteCond %{REQUEST_FILENAME} !-d
+# RewriteRule . /sitec/index.php [L]
 </IfModule>
 
 # Seguridad básica
@@ -25,6 +35,7 @@ RewriteRule . /index.php [L]
   Header always set X-Content-Type-Options nosniff
   Header always set Referrer-Policy same-origin
 </IfModule>
+
 
 
 
