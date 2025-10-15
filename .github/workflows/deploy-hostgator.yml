@@ -32,6 +32,10 @@ jobs:
           WP_ENVIRONMENT_TYPE=production
           EOF
 
+      - name: Write deploy marker
+        run: |
+          echo "deployed $(date -u +'%Y-%m-%dT%H:%M:%SZ') from $GITHUB_REPOSITORY@$GITHUB_SHA" > deploy.txt
+
       - name: Sync files via SFTP
         uses: wlixcc/SFTP-Deploy-Action@v1.2.5
         with:
